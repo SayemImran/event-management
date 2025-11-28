@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-8 rounded-2xl shadow-2xl
+            bg-gradient-to-br from-black via-[#1b0033] to-purple-900
+            text-white border border-white/10 backdrop-blur-xl">
+
+    <h2 class="text-4xl font-bold mb-6 text-purple-200">{{ event.name }}</h2>
+
+    <div class="space-y-3 text-lg">
+
+        <p>
+            <span class="font-semibold text-purple-300">Category:</span>
+            {{ event.category.name }}
+        </p>
+
+        <p>
+            <span class="font-semibold text-purple-300">Location:</span>
+            {{ event.location }}
+        </p>
+
+        <p>
+            <span class="font-semibold text-purple-300">Start Date:</span>
+            {{ event.start_date }}
+        </p>
+
+        <p>
+            <span class="font-semibold text-purple-300">End Date:</span>
+            {{ event.end_date }}
+        </p>
+
+        <p>
+            <span class="font-semibold text-purple-300">Time:</span>
+            {{ event.time }}
+        </p>
+
+        <p class="mt-4">
+            <span class="font-semibold text-purple-300">Description:</span><br>
+            <span class="text-purple-100">{{ event.description }}</span>
+        </p>
+
+        <p class="mt-4">
+            <span class="font-semibold text-purple-300">Participants:</span>
+            {{ event.participants.count }}
+        </p>
+
+        <ol class="ml-4 space-y-1 text-sm text-purple-200">
+            {% for participant in event.participants.all %}
+            <li class="font-extralight">• {{ participant.name }}</li>
+            {% endfor %}
+        </ol>
+
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-8 flex gap-4">
+
+        <a href="/events/{{ event.id }}/edit"
+           class="px-5 py-2.5 rounded-xl bg-blue-600/80 hover:bg-blue-600 
+                  transition font-semibold shadow-md">
+            Edit
+        </a>
+
+        <a href="/events/{{ event.id }}/delete"
+           class="px-5 py-2.5 rounded-xl bg-red-600/80 hover:bg-red-600 
+                  transition font-semibold shadow-md">
+            Delete
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

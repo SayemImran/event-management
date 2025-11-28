@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+<div class="max-w-lg mx-auto mt-8">
+
+    <h2 class="text-3xl font-bold mb-6 text-center text-purple-200 drop-shadow">{{ title }}</h2>
+    <form method="POST" class="flex flex-col gap-4 p-8 rounded-2xl shadow-2xl bg-gradient-to-br from-black via-[#1b0033] to-purple-900 border border-white/10 backdrop-blur-xl">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="mt-4 bg-green-600/80 hover:bg-green-600  text-white px-6 py-2 rounded-xl shadow-md font-semibold transition">
+            Save
+        </button>
+    </form>
+
+</div>
+
+
+{% endblock %}

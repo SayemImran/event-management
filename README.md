@@ -4,6 +4,7 @@ A Django-based web application for managing events, including image uploads and 
 
 **Live Demo:**  https://event-management-4-vvux.onrender.com
 ---
+**Note: Confirmation mail may delay due to hosting site performance configuration. If so run this project localy**
 For testing purposes, you can log in to the Django admin panel using the following credentials:
 
 - **Username:** admin

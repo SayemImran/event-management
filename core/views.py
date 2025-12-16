@@ -27,7 +27,7 @@ def signup(request):
             user.set_password(form.cleaned_data.get('password'))
             user.is_active = False
             user.save()
-            # messages.success(request,'A confirmation mail sent. Please check your email')
+            messages.success(request,'A confirmation mail sent. Please check your email')
             return redirect("login")
     else:
         form = CustomRegistrationForm()
@@ -54,6 +54,7 @@ def log_out(request):
         logout(request)
         return redirect('login')
     return redirect('login')
+
 def activate_user(request, user_id, token):
    try:
         user = User.objects.get(id=user_id)
@@ -72,7 +73,7 @@ def is_admin(user):
 
 def event_participants(request, event_id):
     event = get_object_or_404(Events, id=event_id)
-    participants = event.participants.all()  # RSVP’d users
+    participants = event.participants.all() 
     context = {
         'event': event,
         'participants': participants
@@ -95,7 +96,7 @@ def remove_participant(request, id):
         )
         return redirect('participant_list')
     return redirect('participant_list')
-    # return render(request,'participant_list.html')
+
     
 
 def assign_role(request,user_id):
@@ -111,7 +112,7 @@ def assign_role(request,user_id):
             user.groups.add(role)
             return redirect('participant_list')
     return render(request,'assign_role.html',{"form":form})
-
+@login_required
 def create_group(request):
     form = CreateGroupForm()
     
@@ -124,8 +125,10 @@ def create_group(request):
             return redirect('create-group')
     return render(request,'create_group.html',{"form":form})
 
-
+@login_required
 def event_search(request):
+    if not request.user.groups.filter(name='Admin').exists():
+        return render(request, "no_permission.html")
     query = request.GET.get('search', '')
     category = request.GET.get('category', '')
     start_date = request.GET.get('start_date', '')

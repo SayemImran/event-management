@@ -16,8 +16,10 @@ def only_admin(user):
 
 def is_admin(user):
     return user.groups.filter(name='Organizers').exists() or user.groups.filter(name='Admin').exists()
-
+@login_required
 def event_search(request):
+    if not request.user.groups.filter(name='Organizers').exists():
+        return render(request, "no_permission.html")  
     query = request.GET.get('search', '')
     category = request.GET.get('category', '')
     start_date = request.GET.get('start_date', '')
@@ -51,6 +53,7 @@ def event_search(request):
         'end': end_date,
     })
 
+@login_required
 def event_list(request):
     events = Events.objects.select_related("category").prefetch_related("rsvps")
     events = events.annotate(num_participants=Count("rsvps"))
@@ -177,7 +180,7 @@ def event_delete(request, id):
         return redirect("event_list")
     
     return render(request, "confirm_delete.html", {"obj": event})
-
+@login_required
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'category_list.html', {'categories': categories})
@@ -298,7 +301,7 @@ def totalEvent(request):
         "all_participants": all_participants
     }
     return render(request, "totalEvent.html", context)
-
+@login_required
 def participant_list(request):
     all_participants = User.objects.filter(groups__name='Participants')
     context = {

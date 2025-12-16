@@ -152,3 +152,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ahhakim262142@gmail.com'
 EMAIL_HOST_PASSWORD = 'pqvn xeqe gbfq uqcj'
 FRONTEND_URL = 'http://127.0.0.1:8000'
+
+LOGIN_URL = 'login'

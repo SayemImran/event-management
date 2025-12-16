@@ -1,0 +1,90 @@
+{% comment %} {% load static %} {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/output.css' %}"> {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Events</title>
+</head>
+<body class="bg-black">
+
+ <nav class="backdrop-blur-xl bg-gradient-to-r from-black/70 via-[#1b0033]/70 to-purple-900/70 
+text-white px-6 py-4 shadow-xl border-b border-white/10">
+
+    <div class="flex justify-between items-center">
+
+        <!-- Logo -->
+        <p class="font-bold text-3xl tracking-wide text-purple-300 drop-shadow">
+            DAEVENT<span class="text-purple-500">.com</span>
+        </p>
+
+        <!-- Mobile Menu Button -->
+        <button id="menuBtn" class="md:hidden text-purple-300 focus:outline-none">
+            ☰
+        </button>
+    </div>
+
+    <!-- Menu -->
+    <div id="menu" class="hidden md:flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
+
+        <!-- Links -->
+        <div class="flex flex-col md:flex-row gap-4 text-lg">
+            <a href="{% url 'home' %}" class="hover:text-purple-300">Home</a>
+            <a href="{% url 'event_list' %}" class="hover:text-purple-300">Events</a>
+            <a href="{% url 'category_list' %}" class="hover:text-purple-300">Categories</a>
+            <a href="{% url 'participant_list' %}" class="hover:text-purple-300">Participants</a>
+            <a href="{% url 'dashboard' %}" class="hover:text-purple-300">Dashboard</a>
+            <a href="{% url 'showgroup' %}" class="hover:text-purple-300">Groups</a>
+            <a href="{% url 'create-group' %}" class="hover:text-purple-300">Create Groups</a>
+        </div>
+
+        <!-- Search -->
+        <form action="{% url 'event_search' %}" method="GET" class="flex gap-2">
+            <input name="search"
+                value="{{ request.GET.search }}"
+                placeholder="Search events..."
+                class="px-3 py-2 rounded-lg bg-white/10 text-white placeholder-purple-300
+                border border-white/20 focus:ring-2 focus:ring-purple-500 w-full md:w-52">
+
+            <button class="px-4 py-2 bg-purple-600/80 hover:bg-purple-600 rounded-lg">
+                Search
+            </button>
+        </form>
+
+        <!-- Auth -->
+        <div>
+            {% if request.user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button class="px-4 py-2 bg-purple-600/80 hover:bg-purple-600 rounded-lg">
+                    Log out
+                </button>
+            </form>
+            {% else %}
+            <div class="flex gap-2">
+                <a href="{% url 'login' %}" class="px-4 py-2 bg-purple-600/80 rounded-lg">Log in</a>
+                <a href="{% url 'signup' %}" class="px-4 py-2 bg-purple-600/80 rounded-lg">Sign up</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+
+</div>
+    <div class="container mx-auto mt-6">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+<script>
+    const menuBtn = document.getElementById('menuBtn');
+    const menu = document.getElementById('menu');
+
+    menuBtn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+</script>
+
+</html>

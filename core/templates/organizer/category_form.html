@@ -1,0 +1,36 @@
+{% extends 'organizer/organizer_nav.html' %}
+{% block content %}
+
+<div class="max-w-lg mx-auto mt-8">
+
+    <h1 class="text-3xl font-bold mb-6 text-center text-purple-200 drop-shadow">
+        {{ title|default:"Category Form" }}
+    </h1>
+
+    <form method="POST" 
+          class="flex flex-col gap-4 p-8 rounded-2xl shadow-2xl 
+                 bg-gradient-to-br from-black via-[#1b0033] to-purple-900
+                 border border-white/10 backdrop-blur-xl">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="flex items-center gap-4 mt-4">
+            <button type="submit" 
+                    class="bg-purple-600/80 hover:bg-purple-600 text-white 
+                           px-6 py-2 rounded-xl shadow-md transition font-semibold">
+                Save
+            </button>
+
+            <a href="{% url 'category_list' %}" 
+               class="text-purple-200 hover:text-purple-100 text-sm">
+               Cancel
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+
+{% endblock %}

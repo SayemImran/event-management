@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-6xl mx-auto mt-10">
+
+    <h1 class="text-4xl font-extrabold text-center text-purple-300 mb-10
+               drop-shadow-[0_0_15px_#a855f7]">
+        USER GROUPS & PERMISSIONS
+    </h1>
+    <ul>
+        {% for message in messages %}
+            <li class="bg-green-500 text-white text-xl px-2 py-1 mb-3 rounded">{{message}}</li>
+        {% endfor %}
+    </ul>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        {% for group in groups %}
+        <div class="relative p-6 rounded-2xl
+                    bg-gradient-to-br from-[#0b001a] via-[#1a0033] to-[#2a0055]
+                    border border-purple-500/30
+                    shadow-[0_0_45px_rgba(168,85,247,0.45)]
+                    backdrop-blur-xl">
+
+            <!-- Group Name -->
+            <h2 class="text-2xl font-bold text-fuchsia-300 mb-4
+                       drop-shadow-[0_0_10px_#d946ef]">
+                {{ group.name }}
+            </h2>
+            <form method="POST" action="{% url 'delete-group' group.id %}" class="mt-4">
+            {% csrf_token %}
+            <button type="submit" class="px-4 py-2 mb-3 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition">
+            Delete Group
+            </button>
+            </form>
+
+            <!-- Permissions -->
+            {% if group.permissions.all %}
+            <ul class="space-y-2">
+                {% for perm in group.permissions.all %}
+                <li class="flex items-center gap-2 px-3 py-2 rounded-xl
+                           bg-purple-800/30 border border-purple-400/30
+                           text-purple-100 text-sm
+                           hover:bg-purple-700/40
+                           hover:shadow-[0_0_12px_#a855f7]
+                           transition">
+                    <span class="text-fuchsia-400">▸</span>
+                    {{ perm.name }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p class="text-purple-400 italic text-sm">
+                    No permissions assigned
+                </p>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock content %}

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "participant/participant_nav.html" %}
 
 {% block content %}
 <div class="max-w-4xl flex gap-3 mx-auto p-8 rounded-2xl shadow-2xl
@@ -53,18 +53,6 @@
         </div>
         <!-- Buttons -->
         <div class="mt-8 flex gap-4">
-    
-            <a href="/events/{{ event.id }}/edit"
-               class="px-5 py-2.5 rounded-xl bg-blue-600/80 hover:bg-blue-600 
-                      transition font-semibold shadow-md">
-                Edit
-            </a>
-    
-            <a href="/events/{{ event.id }}/delete"
-               class="px-5 py-2.5 rounded-xl bg-red-600/80 hover:bg-red-600 
-                      transition font-semibold shadow-md">
-                Delete
-            </a>
             <form action="{% url 'rsvp_event' event.id %}" method="POST">
             {% csrf_token %}
                 <button type="submit" name="status" value="interested" class="px-5 py-2.5 rounded-xl bg-blue-600/80 hover:bg-blue-600 

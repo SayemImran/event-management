@@ -1,0 +1,30 @@
+{% extends "participant/participant_nav.html" %}
+{% block content %}
+
+<div class="max-w-3xl mx-auto mt-6">
+    <table class="w-full border border-white/20 text-white">
+        <thead class="bg-purple-800/40">
+            <tr>
+                <th class="p-3 text-left">Event name</th>
+                <th class="p-3 text-left">Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for rsvp in rsvps %}
+            <tr class="border-t border-white/10">
+                <td class="p-3">{{ rsvp.event.name }}</td>
+                <td class="p-3 capitalize">{{ rsvp.status }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="p-4 text-center text-purple-200">
+                    No RSVPs yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

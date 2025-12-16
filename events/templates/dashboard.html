@@ -2,79 +2,122 @@
 
 {% block content %}
 
-<!-- Add Buttons -->
-<div class="flex flex-wrap gap-4 mb-6">
+<!-- Action Buttons -->
+<div class="flex flex-wrap gap-5 mb-10">
     <a href="{% url 'event_create' %}" 
-       class="bg-green-600/80 hover:bg-green-600 text-white px-5 py-2 rounded-xl shadow-md transition font-semibold">
-       + Add Event
+       class="relative px-6 py-3 rounded-xl font-semibold text-white
+              bg-gradient-to-r from-purple-600 to-pink-600
+              shadow-[0_0_25px_#a855f7]
+              hover:shadow-[0_0_40px_#ec4899]
+              transition-all duration-300">
+        + Add Event
     </a>
+
     <a href="{% url 'category_create' %}" 
-       class="bg-green-600/80 hover:bg-green-600 text-white px-5 py-2 rounded-xl shadow-md transition font-semibold">
-       + Add Category
+       class="relative px-6 py-3 rounded-xl font-semibold text-white
+              bg-gradient-to-r from-indigo-600 to-purple-700
+              shadow-[0_0_25px_#6366f1]
+              hover:shadow-[0_0_40px_#818cf8]
+              transition-all duration-300">
+        + Add Category
     </a>
 </div>
 
-<!-- Summary Cards -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
 
-    <div class="flex flex-col items-center justify-center p-6 rounded-2xl shadow-2xl 
-                bg-gradient-to-br from-black via-[#1b0033] to-purple-900 border border-white/10 backdrop-blur-xl">
-        <p class="font-semibold text-xl text-purple-200">PARTICIPANTS</p>
-        <span class="font-bold text-3xl text-white">{{ all_participants.count }}</span>
+    {% comment %} CARD {% endcomment %}
+    <div class="group relative flex flex-col items-center justify-center p-8 rounded-2xl
+                bg-gradient-to-br from-[#0b001a] via-[#1a0033] to-[#2a0055]
+                border border-purple-500/30
+                shadow-[0_0_45px_rgba(168,85,247,0.45)]
+                backdrop-blur-xl transition">
+
+        <p class="text-lg tracking-widest text-purple-300">PARTICIPANTS</p>
+        <span class="mt-2 text-4xl font-extrabold text-white
+                     drop-shadow-[0_0_15px_#a855f7]">
+            {{ all_participants.count }}
+        </span>
     </div>
 
-    <a href="{% url 'total-event' %}">
-        <div class="flex flex-col items-center justify-center p-6 rounded-2xl shadow-2xl 
-                    bg-gradient-to-br from-black via-[#1b0033] to-purple-900 border border-white/10 backdrop-blur-xl">
-            <p class="font-semibold text-xl text-purple-200">TOTAL</p>
-            <span class="font-bold text-3xl text-white">{{ totalevents.count }}</span>
+    <a href="{% url 'total-event' %}" class="group">
+        <div class="relative flex flex-col items-center justify-center p-8 rounded-2xl
+                    bg-gradient-to-br from-[#0b001a] via-[#1a0033] to-[#2a0055]
+                    border border-purple-500/30
+                    shadow-[0_0_45px_rgba(168,85,247,0.45)]
+                    hover:shadow-[0_0_70px_rgba(168,85,247,0.7)]
+                    backdrop-blur-xl transition">
+
+            <p class="text-lg tracking-widest text-purple-300">TOTAL</p>
+            <span class="mt-2 text-4xl font-extrabold text-white">
+                {{ totalevents.count }}
+            </span>
         </div>
     </a>
 
-    <a href="{% url 'up-event' %}">
-        <div class="flex flex-col items-center justify-center p-6 rounded-2xl shadow-2xl 
-                    bg-gradient-to-br from-black via-[#1b0033] to-purple-900 border border-white/10 backdrop-blur-xl">
-            <p class="font-semibold text-xl text-purple-200">UPCOMING</p>
-            <span class="font-bold text-3xl text-white">{{ upevents.count }}</span>
+    <a href="{% url 'up-event' %}" class="group">
+        <div class="relative flex flex-col items-center justify-center p-8 rounded-2xl
+                    bg-gradient-to-br from-[#0b001a] via-[#1a0033] to-[#2a0055]
+                    border border-indigo-500/30
+                    shadow-[0_0_45px_rgba(99,102,241,0.45)]
+                    hover:shadow-[0_0_70px_rgba(99,102,241,0.7)]
+                    backdrop-blur-xl transition">
+
+            <p class="text-lg tracking-widest text-indigo-300">UPCOMING</p>
+            <span class="mt-2 text-4xl font-extrabold text-white">
+                {{ upevents.count }}
+            </span>
         </div>
     </a>
 
-    <a href="{% url 'past-event' %}">
-        <div class="flex flex-col items-center justify-center p-6 rounded-2xl shadow-2xl 
-                    bg-gradient-to-br from-black via-[#1b0033] to-purple-900 border border-white/10 backdrop-blur-xl">
-            <p class="font-semibold text-xl text-purple-200">PAST</p>
-            <span class="font-bold text-3xl text-white">{{ pastevents.count }}</span>
+    <a href="{% url 'past-event' %}" class="group">
+        <div class="relative flex flex-col items-center justify-center p-8 rounded-2xl
+                    bg-gradient-to-br from-[#0b001a] via-[#1a0033] to-[#2a0055]
+                    border border-fuchsia-500/30
+                    shadow-[0_0_45px_rgba(217,70,239,0.45)]
+                    hover:shadow-[0_0_70px_rgba(217,70,239,0.7)]
+                    backdrop-blur-xl transition">
+
+            <p class="text-lg tracking-widest text-fuchsia-300">PAST</p>
+            <span class="mt-2 text-4xl font-extrabold text-white">
+                {{ pastevents.count }}
+            </span>
         </div>
     </a>
 
 </div>
 
 <!-- Today Events -->
-<div class="mt-8 flex flex-col gap-5">
+<div class="mt-12 flex flex-col gap-6">
 
-    <div class="p-3">
-        <span class="font-semibold text-2xl text-purple-200">TODAY EVENTS</span>
-    </div>
+    <h2 class="text-3xl font-bold text-purple-300
+               drop-shadow-[0_0_12px_#a855f7]">
+        TODAY EVENTS
+    </h2>
 
-    <div class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-1 gap-5">
         {% for event in events %}
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-2xl shadow-2xl 
-                    bg-gradient-to-br from-black via-[#1b0033] to-purple-900 border border-white/10 backdrop-blur-xl">
+        <div class="group grid grid-cols-1 md:grid-cols-4 gap-4 p-6 rounded-2xl
+                    bg-gradient-to-br from-[#0b001a] via-[#1a0033] to-[#2a0055]
+                    border border-purple-500/30
+                    shadow-[0_0_40px_rgba(168,85,247,0.4)]
+                    hover:shadow-[0_0_65px_rgba(168,85,247,0.6)]
+                    backdrop-blur-xl transition">
 
-            <div>
-                <p class="text-xl md:text-2xl font-bold text-white">{{ event.name }}</p>
+            <p class="text-xl md:text-2xl font-bold text-white">
+                {{ event.name }}
+            </p>
+
+            <div class="flex items-center text-purple-200">
+                Participants: {{ event.participants.count }}
             </div>
 
             <div class="flex items-center text-purple-200">
-                <span>Participants: {{ event.participants.count }}</span>
+                Start: {{ event.start_date }}
             </div>
 
             <div class="flex items-center text-purple-200">
-                <span>Start: {{ event.start_date }}</span>
-            </div>
-
-            <div class="flex items-center text-purple-200">
-                <span>End: {{ event.end_date }}</span>
+                End: {{ event.end_date }}
             </div>
 
         </div>

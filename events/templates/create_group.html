@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <ul>
+        {% for message in messages %}
+             <li class="bg-green-500 text-white text-xl px-2 py-1 mb-3 rounded">{{message}}</li>
+        {% endfor %}
+    </ul>
+    <form action="" method='POST' class="text-white w-1/2 mx-auto">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="bg-purple-500 text-white rounded mt-3 px-2 py-1">Create</button>
+    </form>
+</div>
+{% endblock content %}

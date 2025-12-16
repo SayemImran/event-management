@@ -1,0 +1,39 @@
+{% extends 'organizer/organizer_nav.html' %}
+{% block title %}Category List{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-6">
+
+    <h1 class="text-3xl font-bold mb-6 text-center text-purple-200 drop-shadow-lg">
+        Categories
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {% for category in categories %}
+        <div class="flex flex-col gap-4 p-6 rounded-2xl shadow-2xl bg-gradient-to-br from-black via-[#1b0033] to-purple-900 border border-white/10 backdrop-blur-xl min-h-48">
+
+            <h2 class="text-2xl font-bold text-purple-200 drop-shadow">
+                {{ category.name }}
+            </h2>
+
+            <p class="text-purple-100">
+                {{ category.description }}
+            </p>
+
+            <div class="flex gap-4 mt-4">
+                <a href="{% url 'category-edit' category.id %}"
+                   class="px-4 py-2 bg-blue-600/80 hover:bg-blue-600 rounded-xl text-white font-semibold shadow-md transition">
+                    Edit
+                </a>
+                <a href="{% url 'category-delete' category.id %}"
+                   class="px-4 py-2 bg-red-600/80 hover:bg-red-600 rounded-xl text-white font-semibold shadow-md transition">
+                    Delete
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

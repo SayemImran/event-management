@@ -2,7 +2,7 @@
 
 A Django-based web application for managing events, including image uploads and PostgreSQL database integration. The project is deployed on Render and supports both web service and background tasks.
 
-**Live Demo:** [https://event-management-3-xlr7.onrender.com](https://event-management-3-xlr7.onrender.com)
+**Live Demo:** [https://event-management-3-xlr7.onrender.com](https://event-management-3-xlr7.onrender.com) admin_credential_for_test:['admin','admin123']
 
 ---
 

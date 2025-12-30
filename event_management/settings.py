@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events',
-    'core'
+    'core',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -68,7 +69,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 # DATABASES = {
 #    'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'event_management',
+#         'NAME': 'eventmanagement_db',
 #         'USER': 'postgres',
 #         'PASSWORD': 'password',
 #         'HOST': 'localhost',
@@ -89,7 +90,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://event_management_1a9v_user:1aSmYJ5mJCJNldgoNc3VqK6Aes76Zcte@dpg-d502hiali9vc73e37c5g-a.oregon-postgres.render.com/event_management_1a9v',
+        default='postgresql://event_management_db_m8vg_user:h4t2ZzoNprcRq3O1EXyfLvQV0HItuew8@dpg-d59k28buibrs73bbk9h0-a.oregon-postgres.render.com/event_management_db_m8vg',
         conn_max_age=600
     )
 }
@@ -154,3 +155,4 @@ EMAIL_HOST_PASSWORD = 'pqvn xeqe gbfq uqcj'
 FRONTEND_URL = 'http://127.0.0.1:8000'
 
 LOGIN_URL = 'login'
+AUTH_USER_MODEL = 'accounts.CustomUser'

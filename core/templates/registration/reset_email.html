@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Password Reset</title>
+  </head>
+
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #0b061a;
+      font-family: Arial, Helvetica, sans-serif;
+    "
+  >
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding: 40px 15px">
+          <table
+            width="600"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              background: linear-gradient(135deg, #1a103d, #12082e);
+              border-radius: 10px;
+              box-shadow: 0 0 25px rgba(168, 85, 247, 0.25);
+              padding: 32px;
+            "
+          >
+            <tr>
+              <td>
+                <!-- Header -->
+                <h1
+                  style="
+                    color: #c084fc;
+                    text-align: center;
+                    margin-bottom: 10px;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Password Reset
+                </h1>
+
+                <p
+                  style="
+                    color: #e9d5ff;
+                    text-align: center;
+                    font-size: 14px;
+                    margin-bottom: 30px;
+                  "
+                >
+                  Secure your account in just one step
+                </p>
+
+                <!-- Body -->
+                <p style="color: #ddd6fe; font-size: 15px">
+                  Hi <strong>{{ user.get_full_name|default:user.username }}</strong>,
+                </p>
+
+                <p style="color: #ddd6fe; font-size: 15px">
+                  We received a request to reset your password. Click the button
+                  below to continue.
+                </p>
+
+                <!-- Button -->
+                <div style="text-align: center; margin: 35px 0">
+                  <a
+                    href="{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}"
+                    style="
+                      background: linear-gradient(90deg, #a855f7, #6366f1);
+                      color: #ffffff;
+                      padding: 14px 34px;
+                      text-decoration: none;
+                      border-radius: 30px;
+                      font-weight: bold;
+                      letter-spacing: 0.5px;
+                      box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+                      display: inline-block;
+                    "
+                  >
+                    RESET PASSWORD
+                  </a>
+                </div>
+
+                <p style="color: #c4b5fd; font-size: 14px">
+                  If you didn’t request this password reset, you can safely
+                  ignore this email.
+                </p>
+
+                <hr
+                  style="
+                    border: none;
+                    height: 1px;
+                    background: linear-gradient(
+                      to right,
+                      transparent,
+                      #7c3aed,
+                      transparent
+                    );
+                    margin: 30px 0;
+                  "
+                />
+
+                <p style="color: #a78bfa; font-size: 12px; text-align: center">
+                  © {{ site_name }} · Stay secure
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

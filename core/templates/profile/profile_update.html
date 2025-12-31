@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-12 bg-[#120a22] p-8 rounded-2xl
+            border border-purple-500/30 shadow-xl">
+
+    <h2 class="text-xl font-bold text-purple-400 mb-6 text-center">
+        Edit Profile
+    </h2>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="mb-4">
+                <!-- Label -->
+                <label class="block text-sm text-purple-300 mb-1">
+                    {{ field.label }}
+                </label>
+
+                <!-- Field -->
+                {{ field }}
+
+                <!-- Errors -->
+                {% if field.errors %}
+                    <p class="text-red-400 text-xs mt-1">{{ field.errors|striptags }}</p>
+                {% endif %}
+
+                <!-- Clear checkbox for ImageField -->
+                {% if field.field.widget.input_type == "file" and field.value %}
+                    <label class="flex items-center gap-2 text-xs text-red-400 mt-1">
+                        {{ field.clear_checkbox }} Remove current image
+                    </label>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Submit Button -->
+        <button class="w-full py-2 rounded-xl
+                       bg-gradient-to-r from-purple-600 to-fuchsia-600
+                       shadow-lg font-semibold hover:from-purple-700 hover:to-fuchsia-700 transition-all duration-300">
+            Save Changes
+        </button>
+    </form>
+</div>
+{% endblock %}

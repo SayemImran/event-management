@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from core.views import *
 from events.views import group_delete
+from django.contrib.auth.views import PasswordChangeDoneView
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
@@ -36,7 +37,12 @@ urlpatterns = [
     path('organizer/events/<int:id>/',eventdetails, name='org-event_detail'),
     path('organizer/events/<int:id>/view/', viewEvent, name='org-view-event'),
     path('organizer/events/<int:id>/edit/',eventupdate, name='org-event-update'),
-    path('organizer/events/<int:id>/delete/', eventdelete, name='org-event-delete')
-
+    path('organizer/events/<int:id>/delete/', eventdelete, name='org-event-delete'),
+    path('profile/',ProfileDetailView.as_view(),name='profile'),
+    path('profile/update/',ProfileUpdateView.as_view(),name='profile_update'),
+    path('password-change/',CustomPasswordChangeView.as_view(),name='change_password'),
+    path('password-change/done/',CustomPasswordChangeDoneView.as_view(),name='password_change_done'),
+    path('password-reset/',CustomPasswordResetView.as_view(),name='reset_password'),
+    path('password-reset/confirm/<uidb64>/<token>/',CustomPasswordResetConfirmView.as_view(),name='password_reset_confirm'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

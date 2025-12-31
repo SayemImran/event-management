@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count, Q
 from datetime import date
 from django.contrib.auth.decorators import login_required,user_passes_test
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import Group, Permission
 from events.models import Events, Category,RSVP
 from events.forms import EventForm, CategoryForm
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 def homepage(request):
     return render(request,"home.html")
 
@@ -53,45 +59,45 @@ def event_search(request):
         'end': end_date,
     })
 
-@login_required
-def event_list(request):
-    events = Events.objects.select_related("category").prefetch_related("rsvps")
-    events = events.annotate(num_participants=Count("rsvps"))
+# @login_required
+# def event_list(request):
+#     events = Events.objects.select_related("category").prefetch_related("rsvps")
+#     events = events.annotate(num_participants=Count("rsvps"))
 
-    categories = Category.objects.all()
+#     categories = Category.objects.all()
 
-    return render(request, "event_list.html", {
-        "events": events,
-        "categories": categories,
-    })
+#     return render(request, "event_list.html", {
+#         "events": events,
+#         "categories": categories,
+#     })
 
 
-def viewEvent(request,id):
-    event = get_object_or_404(Events, id=id)
-    return render(request, "event_detail.html", {"event": event})
+# def viewEvent(request,id):
+#     event = get_object_or_404(Events, id=id)
+#     return render(request, "event_detail.html", {"event": event})
 
 # event details
-@login_required
-def event_detail(request, id):
-    event = get_object_or_404(
-        Events.objects.select_related("category").prefetch_related("rsvps"),
-        id=id
-    )
+# @login_required
+# def event_detail(request, id):
+#     event = get_object_or_404(
+#         Events.objects.select_related("category").prefetch_related("rsvps"),
+#         id=id
+#     )
 
-    try:
-        user_rsvp = RSVP.objects.get(user=request.user, event=event)
-    except RSVP.DoesNotExist:
-        user_rsvp = None
+#     try:
+#         user_rsvp = RSVP.objects.get(user=request.user, event=event)
+#     except RSVP.DoesNotExist:
+#         user_rsvp = None
 
-    rsvp_participants = RSVP.objects.filter(event=event).select_related('user')
+#     rsvp_participants = RSVP.objects.filter(event=event).select_related('user')
 
-    context = {
-        "event": event,
-        "user_rsvp": user_rsvp,
-        "rsvp_participants": rsvp_participants
-    }
+#     context = {
+#         "event": event,
+#         "user_rsvp": user_rsvp,
+#         "rsvp_participants": rsvp_participants
+#     }
 
-    return render(request, "event_detail.html", context)
+#     return render(request, "event_detail.html", context)
 
 @login_required
 def rsvp_event(request, event_id):
@@ -139,47 +145,55 @@ def my_rsvps(request):
 
 
 #  create event
-@login_required
-@user_passes_test(is_admin)
-def event_create(request):
-    if request.method == "POST":
-        form = EventForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("event_list")
-    else:
-        form = EventForm()
+# @login_required
+# @user_passes_test(is_admin)
+# def event_create(request):
+#     if request.method == "POST":
+#         form = EventForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("event_list")
+#     else:
+#         form = EventForm()
 
-    return render(request, "event_form.html", {"form": form})
+#     return render(request, "event_form.html", {"form": form})
 
 
 #  update event data
-@login_required
-@user_passes_test(is_admin)
-def event_update(request, id):
-    event = get_object_or_404(Events, id=id)
+# @login_required
+# @user_passes_test(is_admin)
+# def event_update(request, id):
+#     event = get_object_or_404(Events, id=id)
 
-    if request.method == "POST":
-        form = EventForm(request.POST,request.FILES, instance=event)
-        if form.is_valid():
-            form.save()
-            return redirect("event_detail", id = id)
-    else:
-        form = EventForm(instance=event)
+#     if request.method == "POST":
+#         form = EventForm(request.POST,request.FILES, instance=event)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("event_detail", id = id)
+#     else:
+#         form = EventForm(instance=event)
 
-    return render(request, "event_form.html", {"form": form})
+#     return render(request, "event_form.html", {"form": form})
 
 #  delete event
-@login_required
-@user_passes_test(is_admin)
-def event_delete(request, id):
-    event = get_object_or_404(Events, id = id)
+# @login_required
+# @user_passes_test(is_admin)
+# def event_delete(request, id):
+#     event = get_object_or_404(Events, id = id)
 
-    if request.method == "POST":
-        event.delete()
-        return redirect("event_list")
+#     if request.method == "POST":
+#         event.delete()
+#         return redirect("event_list")
     
-    return render(request, "confirm_delete.html", {"obj": event})
+#     return render(request, "confirm_delete.html", {"obj": event})
+
+
+
+
+
+
+
+
 @login_required
 def category_list(request):
     categories = Category.objects.all()
@@ -326,3 +340,102 @@ def group_delete(request,id):
         return redirect('showgroup')
 
     return render(request, 'showGroup.html', {'obj': group})
+
+
+
+
+
+
+
+# ########################################################################################
+#                                                                                       ##
+#               class based view Implementations                                        ##
+#                                                                                       ##
+##########################################################################################   
+
+''' event list Class based view'''
+class EventListView(LoginRequiredMixin, ListView):
+    model = Events
+    template_name = "event_list.html"
+    context_object_name = "events"
+
+    def get_queryset(self):
+        return (
+            Events.objects
+            .select_related("category")
+            .prefetch_related("rsvps")
+            .annotate(num_participants=Count("rsvps"))
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+
+
+def viewEvent(request,id):
+    event = get_object_or_404(Events, id=id)
+    return render(request, "event_detail.html", {"event": event})
+
+
+
+'''  Event details View     '''
+class EventDetailView(LoginRequiredMixin, DetailView):
+    model = Events
+    template_name = "event_detail.html"
+    pk_url_kwarg = "id"
+
+    def get_queryset(self):
+        return Events.objects.select_related("category").prefetch_related("rsvps")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.object
+
+        context['user_rsvp'] = RSVP.objects.filter(
+            user=self.request.user,
+            event=event
+        ).first()
+
+        context['rsvp_participants'] = RSVP.objects.filter(
+            event=event
+        ).select_related('user')
+
+        return context
+
+
+'''   Create event class based view  '''
+class EventCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Events
+    form_class = EventForm
+    template_name = "event_form.html"
+    success_url = reverse_lazy('event_list')
+
+    def test_func(self):
+        return is_admin(self.request.user)
+
+
+
+class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Events
+    form_class = EventForm
+    template_name = "event_form.html"
+    pk_url_kwarg = "id"
+
+    def test_func(self):
+        return is_admin(self.request.user)
+
+    def get_success_url(self):
+        return redirect('event_detail', id=self.object.id).url
+
+
+
+class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Events
+    template_name = "confirm_delete.html"
+    pk_url_kwarg = "id"
+    success_url = reverse_lazy("event_list")
+
+    def test_func(self):
+        return is_admin(self.request.user)

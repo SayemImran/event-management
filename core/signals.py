@@ -1,11 +1,12 @@
 from django.dispatch import receiver
 from django.db.models.signals import m2m_changed, pre_save, post_save, pre_delete, post_delete
 from django.core.mail import send_mail
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from events.models import Events,RSVP
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 @receiver(post_save, sender=RSVP)
 def rsvp_created(sender, instance, created, **kwargs):
@@ -31,6 +32,6 @@ def send_activation_mail(sender, instance, created, **kwargs):
 @receiver(post_save,sender=User)
 def assign_role(sender, instance,created, **kwargs):
     if created:
-        participants_group,created = Group.objects.get_or_create(name='Participants')
+        participants_group,created = Group.objects.get_or_create(name='Participant')
         instance.groups.add(participants_group)
         instance.save()

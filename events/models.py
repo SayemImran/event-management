@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=150)
@@ -24,7 +24,7 @@ class Events(models.Model):
     )
 
     rsvps = models.ManyToManyField(
-        User,
+        settings.AUTH_USER_MODEL,
         through='RSVP',
         related_name='rsvped_events',
         blank=True
@@ -44,7 +44,7 @@ class RSVP(models.Model):
         ('interested', 'Interested'),
         ('going', 'Going'),
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     timestamp = models.DateTimeField(auto_now_add=True)

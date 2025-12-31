@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from core.forms import *
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import User,Group,Permission
+from django.contrib.auth.models import Group,Permission
 from django.shortcuts import render, get_object_or_404, redirect
 from events.models import Events
 from events.forms import *
@@ -16,6 +16,14 @@ from events.models import Events, Category,RSVP
 from django.core.mail import send_mail
 from django.conf import settings
 from events.views import is_admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import UpdateView,TemplateView
+from django.contrib.auth.views import PasswordChangeView,PasswordChangeDoneView,PasswordResetView,PasswordResetConfirmView
+from django.urls import reverse_lazy
+User = get_user_model()
+
+
 
 def orgHome(request):
     return render(request,'organizer/organizer_home.html')
@@ -41,9 +49,9 @@ def log_in(request):
             user = form.get_user()
             login(request,user)
             
-            if user.groups.filter(name='Participants').exists():    
+            if user.groups.filter(name='Participant').exists():    
                 return redirect('paticipant_dashboard')
-            elif user.groups.filter(name='Organizers').exists():
+            elif user.groups.filter(name='Organizer').exists():
                 return redirect('organizer-home')
             else:
                 return redirect('home')
@@ -426,3 +434,97 @@ def category_delete(request, id):
         category.delete()
         return redirect('category-list')
     return render(request, 'organizer/confirm_delete.html', {'obj': category})
+
+
+
+class ProfileUpdateView(LoginRequiredMixin,UpdateView):
+    model = User
+    form_class = UserProfileForm
+    template_name='profile/profile_update.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self):
+        return self.request.user
+    def get_success_url(self):
+        user = self.request.user
+
+        if user.groups.filter(name__iexact="Participant").exists():
+            return reverse_lazy("paticipant_dashboard")
+
+        elif user.groups.filter(name__iexact="Organizer").exists():
+            return reverse_lazy("organizer-home")
+
+        return reverse_lazy("home")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['first_name'] = self.request.user.first_name
+        context['last_name'] = self.request.user.last_name
+        context['profile_image'] = self.request.user.profile_image
+
+        return context
+    
+    
+class ProfileDetailView(LoginRequiredMixin, TemplateView):
+    template_name = 'profile/profile_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = self.request.user
+        return context
+
+class CustomPasswordChangeView(LoginRequiredMixin,PasswordChangeView):
+    template_name='accounts/change_passwd.html'
+    form_class = CustomPasswordChangeForm
+
+class CustomPasswordChangeDoneView(LoginRequiredMixin,PasswordChangeDoneView):
+    template_name = "accounts/password_changed.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context["is_participant"] = user.groups.filter(
+            name__iexact="Participant"
+        ).exists()
+
+        context["is_organizer"] = user.groups.filter(
+            name__iexact="Organizer"
+        ).exists()
+
+        return context
+
+
+class CustomPasswordResetView(PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = 'registration/reset_password.html'
+    success_url = reverse_lazy('login')
+    html_email_template_name = 'registration/reset_email.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['protocol'] = 'https' if self.request.is_secure() else 'http'
+        context['domain'] = self.request.get_host()
+        print(context)
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, 'A Reset email sent. Please check your email')
+        return super().form_valid(form)
+
+
+
+    
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = CustomPasswordResetConfirmForm
+    template_name = 'registration/reset_password_confirm.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context['form'])  
+        return context
+    def form_valid(self, form):
+        messages.success(
+            self.request, 'Password reset successfully')
+        return super().form_valid(form)

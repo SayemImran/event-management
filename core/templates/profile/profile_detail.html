@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+
+    <!-- LEFT: Profile Card -->
+    <div class="md:col-span-3 bg-[#120a22] rounded-2xl p-6
+                border border-purple-500/30
+                shadow-[0_0_25px_rgba(168,85,247,0.5)]">
+
+        <div class="flex items-center gap-6">
+            <img src="{{ profile.profile_image.url }}"
+                 class="w-28 h-28 rounded-full border-4 border-purple-500 shadow-lg">
+
+            <div>
+                <h2 class="text-2xl font-bold text-purple-400">
+                    {{ profile.get_full_name|default:profile.username }}
+                </h2>
+                <p class="text-gray-400">@{{ profile.username }}</p>
+            </div>
+        </div>
+
+        <div class="mt-6 space-y-3 text-gray-300">
+            <p><span class="text-purple-400">Email:</span> {{ profile.email }}</p>
+            <p><span class="text-purple-400">Phone:</span> {{ profile.phone_number|default:"—" }}</p>
+        </div>
+    </div>
+
+    <!-- RIGHT: Actions -->
+    <div class="space-y-4">
+        <a href="{% url 'profile_update' %}"
+           class="block text-center py-3 rounded-xl
+                  bg-purple-600 hover:bg-purple-700
+                  shadow-lg font-semibold">
+            ✏️ Edit Profile
+        </a>
+        {% comment %} {% url 'password_change' %} {% endcomment %}
+        <a href="{% url 'change_password' %}"
+           class="block text-center py-3 rounded-xl
+                  bg-fuchsia-600 hover:bg-fuchsia-700
+                  shadow-lg font-semibold">
+            🔒 Change Password
+        </a>
+    </div>
+
+</div>
+{% endblock %}

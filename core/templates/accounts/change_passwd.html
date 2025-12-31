@@ -1,0 +1,77 @@
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Neon label shadow */
+        .neon-label {
+            text-shadow: 0 0 6px #c77dff, 0 0 12px #a855f7;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-black via-purple-900 to-black min-h-screen flex items-center justify-center">
+
+    <!-- Main Card -->
+    <div class="w-full max-w-md bg-black/40 backdrop-blur-xl p-8 rounded-xl shadow-2xl border border-purple-700/40 mx-auto mt-6 mb-7">
+
+        <!-- Title -->
+        <h1 class="text-center text-3xl font-bold text-purple-300 mb-6 drop-shadow-lg">
+            Change Your Password
+        </h1>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="px-3 py-2 mb-3 rounded-md text-white
+                    {% if message.tags == 'success' %} bg-green-600/80 {% else %} bg-red-600/80 {% endif %}"
+                >
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Non-field errors -->
+        {% if form.non_field_errors %}
+            <div class="text-red-400 mb-4">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Password Change Form -->
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div>
+                    <label class="neon-label block text-purple-300 font-semibold mb-1">
+                        {{ field.label }}
+                    </label>
+
+                    <!-- Styled input field -->
+                    {{ field|add_class:"w-full px-4 py-2 rounded-lg border-2 border-purple-600 bg-black/30 text-purple-100 placeholder-purple-400 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-500/50 transition-all duration-300" }}
+
+                    {% if field.errors %}
+                        <p class="text-red-400 text-sm mt-1">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <!-- Submit Button -->
+            <button 
+                type="submit"
+                class="w-full bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 rounded-lg transition-all duration-300 shadow-[0_0_20px_#a855f7] hover:shadow-[0_0_25px_#d8b4fe] hover:scale-105"
+            >
+                Change Password
+            </button>
+        </form>
+
+    </div>
+
+</body>
+</html>

@@ -1,8 +1,9 @@
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm,PasswordChangeForm,PasswordResetForm,SetPasswordForm
+from django.contrib.auth.models import Group, Permission
 from django import forms
 import re
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class CustomRegistrationForm(forms.ModelForm):
     password = forms.CharField(
@@ -153,3 +154,77 @@ class CreateGroupForm(forms.ModelForm):
         labels = {
             'permissions': 'Assign Permissions'
         }
+
+
+# class UserProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ['profile_image', 'phone_number', 'email', 'first_name', 'last_name']
+#         widgets = {
+#             'phone_number': forms.TextInput(attrs={
+#                 'class': 'text-white w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40 focus:outline-none focus:ring-2 focus:ring-purple-500'
+#             }),
+#             'email': forms.EmailInput(attrs={
+#                 'class': 'text-white w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40 focus:outline-none focus:ring-2 focus:ring-purple-500'
+#             }),
+#             'first_name': forms.TextInput(attrs={
+#                 'class': 'text-white w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40'
+#             }),
+#             'last_name': forms.TextInput(attrs={
+#                 'class': 'text-white w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40'
+#             }),
+#         }
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['profile_image', 'phone_number', 'email', 'first_name', 'last_name']
+        widgets = {
+            'phone_number': forms.TextInput(attrs={
+                        'class': 'w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40'
+                          'focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-200',
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40'
+                          'focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-200',
+            }),
+            'first_name': forms.TextInput(attrs={
+                'class': 'w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40 text-gray-200'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'w-full px-3 py-2 rounded-lg bg-black/40 border border-purple-500/40 text-gray-200'
+            }),
+            'profile_image': forms.ClearableFileInput(attrs={
+                'class': 'text-gray-200'
+            }),
+        }
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Common neon classes for all fields
+        neon_class = (
+            "w-full px-4 py-2 rounded-lg border-2 border-purple-600 "
+            "bg-black/30 text-purple-100 placeholder-purple-400 "
+            "focus:outline-none focus:border-purple-400 focus:ring-2 "
+            "focus:ring-purple-500/50 transition-all duration-300"
+        )
+
+        # Apply to each field
+        self.fields['old_password'].widget.attrs.update({
+            "class": neon_class,
+            "placeholder": "Current Password"
+        })
+        self.fields['new_password1'].widget.attrs.update({
+            "class": neon_class,
+            "placeholder": "New Password"
+        })
+        self.fields['new_password2'].widget.attrs.update({
+            "class": neon_class,
+            "placeholder": "Confirm New Password"
+        })
+
+class CustomPasswordResetForm(PasswordResetForm):
+    pass
+class CustomPasswordResetConfirmForm(SetPasswordForm):
+    pass

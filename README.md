@@ -6,10 +6,7 @@ A Django-based web application for managing events, including image uploads and 
 ---
 For testing purposes, you can log in to the Django admin panel using the following credentials:
 
-- **Username:** admin
-- **Password:** admin123
 
-**Note:** These credentials are only for testing. Do not use them in a production environment.
 
 ## Features
 
